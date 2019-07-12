@@ -1,0 +1,43 @@
+package me.zZolt.SheepWars.Shop;
+
+import cn.nukkit.Player;
+import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.Listener;
+import cn.nukkit.event.player.PlayerFormRespondedEvent;
+import cn.nukkit.form.window.FormWindowCustom;
+import cn.nukkit.utils.ConfigSection;
+
+public class ShopQuickBuy implements Listener {
+	
+	ShopMisc shopMisc = new ShopMisc();
+	
+	@EventHandler
+	public void onRespond(PlayerFormRespondedEvent event) {
+		
+		shopMisc.config.save();
+		
+		Player player = event.getPlayer();
+		FormWindowCustom window = (FormWindowCustom) event.getWindow();
+		
+		for(int i = 0; i < window.getResponse().getResponses().size(); i++) {
+		
+		if(window.getResponse().getToggleResponse(i)) {
+			
+			ConfigSection section = shopMisc.config.getSection(player.getName());
+			section.set(shopMisc.items[i], true);
+			shopMisc.config.set(player.getName(), section);
+			
+		} else {
+			
+			ConfigSection section = shopMisc.config.getSection(player.getName());
+			section.set(shopMisc.items[i], false);
+			shopMisc.config.set(player.getName(), section);
+			
+			}
+		
+		}
+		
+		shopMisc.config.save();
+	}
+
+}
